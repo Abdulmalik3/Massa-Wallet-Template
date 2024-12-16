@@ -1,0 +1,67 @@
+<div class="container">
+  <div *ngIf="!provider" class="loading-screen">
+    <div class="spinner"></div>
+    <p>Connecting to wallet...</p>
+  </div>
+
+  <div class="dashboard" *ngIf="provider">
+    <header class="dashboard-header">
+      <h1>Wallet Connection</h1>
+      <div class="user-info">
+        <span class="address-label">Connected Address:</span>
+        <span class="address-value">{{ userAddress }}</span>
+        <div class="wallet-selector">
+          <button class="current-wallet-button" (click)="toggleWalletPopup()">
+            {{ currentWallet?.name() || 'Select Wallet' }}
+            <span class="arrow-icon">▼</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="status-container" *ngIf="connectionStatus">
+      <div class="status-message" [class.error]="connectionStatus.includes('failed')">
+        {{ connectionStatus }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Wallet Selection Panel -->
+  <div class="wallet-slide-panel" [class.open]="isWalletPopupOpen">
+    <div class="panel-header">
+      <h2>Available Wallets & Accounts</h2>
+      <button class="close-button" (click)="toggleWalletPopup()">×</button>
+    </div>
+    <div class="wallet-list">
+      <div class="wallet-section">
+        <div class="wallet-header">
+          {{ currentWallet?.name() || 'Current Wallet' }}
+        </div>
+        <div 
+          *ngFor="let account of walletAccounts" 
+          class="account-item"
+          [class.active]="account.address === userAddress"
+        >
+          <div class="account-info">
+            <span class="account-name">{{ account.name }}</span>
+            <span class="account-address">{{ account.address | slice:0:6 }}...{{ account.address | slice:-7 }}</span>
+          </div>
+          <button 
+            class="connect-button" 
+            (click)="connectAccount(account)"
+            [disabled]="account.address === userAddress"
+          >
+            {{ account.address === userAddress ? 'Connected' : 'Connect' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wallet-info" *ngIf="userAddress">
+    <div class="balance-display">
+      <span>Balance: {{ walletBalance }} MAS</span>
+    </div>
+    <!-- ... rest of your wallet UI ... -->
+  </div>
+</div>
