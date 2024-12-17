@@ -494,3 +494,43 @@
   color: #495057;
   cursor: default;
 }
+
+.transfer-form {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.transfer-status {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.transfer-status.error {
+  background-color: #ffe6e6;
+  color: #d63031;
+}
+
+.transfer-status.success {
+  background-color: #e6ffe6;
+  color: #27ae60;
+}

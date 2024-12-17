@@ -33,9 +33,13 @@ export class AppComponent implements OnInit, OnDestroy {
   walletAccounts: WalletAccount[] = [];
   isConnecting: boolean = false;
   walletBalance: string = '0';
+  recipientAddress: string = '';
+  transferAmount: string = '';
+  transferStatus: string = '';
+  account: any;
 
   // change buildnet to mainnet
-  jsonRPCClient: JsonRPCClient = JsonRPCClient.buildnet();
+  //jsonRPCClient: JsonRPCClient = JsonRPCClient.buildnet();
 
   constructor() {
 
@@ -88,6 +92,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.currentWallet = wallet;
 
       const accounts = await this.withTimeout(wallet.accounts());
+      this.account = accounts;
       if (accounts.length === 0) {
         throw new Error("No accounts found");
       }
@@ -179,9 +184,9 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  async connectAccount(account: WalletAccount) {
+  async connectAccount(account: any) {
     try {
-      this.provider = this.currentWallet;
+      this.provider = account;
       this.userAddress = account.address;
       this.isWalletPopupOpen = false;
       this.connectionStatus = "Connected to account successfully";
@@ -195,9 +200,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private async updateWalletBalance() {
     try {
-     
-       this.walletBalance = (await this.jsonRPCClient.getBalance(this.userAddress) / 1000000000n).toString()
-      
+      if (this.userAddress) {
+        this.walletBalance = ( (await (this.provider?.balance(true)) || 0n ) / 1000000000n ).toString();
+        console.log("Wallet balance:", this.walletBalance);
+
+      }
     } catch (error) {
       console.error("Error fetching balance:", error);
     }
@@ -218,5 +225,30 @@ export class AppComponent implements OnInit, OnDestroy {
       clearTimeout(this.connectionTimeout);
     }
     this.disconnectWallet();
+  }
+
+  async transferMAS() {
+    try {
+      if (!this.provider || !this.userAddress) {
+        throw new Error('Wallet not connected');
+      }
+
+      if (!this.recipientAddress) {
+        throw new Error('Please enter recipient address');
+      }
+
+      const amount = parseFloat(this.transferAmount);
+      if (isNaN(amount) || amount <= 0) {
+        throw new Error('Please enter a valid amount');
+      }
+
+      // Convert amount to nanoMAS (multiply by 1e9)
+      let transfer = await this.provider.transfer(this.recipientAddress, BigInt(Math.floor(amount * 1000000000)));
+      console.log("Transfer:", transfer);
+      await this.updateWalletBalance();
+    } catch (error: any) {
+      console.error('Transfer error:', error);
+      this.transferStatus = `Transfer failed: ${error.message}`;
+    }
   }
 }

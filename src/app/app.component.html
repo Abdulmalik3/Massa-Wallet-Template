@@ -1,7 +1,7 @@
 <div class="container">
   <div *ngIf="!provider" class="loading-screen">
     <div class="spinner"></div>
-    <p>Connecting to wallet...</p>
+    <p>{{ connectionStatus || 'Connecting to wallet...' }}</p>
   </div>
 
   <div class="dashboard" *ngIf="provider">
@@ -38,7 +38,7 @@
           {{ currentWallet?.name() || 'Current Wallet' }}
         </div>
         <div 
-          *ngFor="let account of walletAccounts" 
+          *ngFor="let account of account" 
           class="account-item"
           [class.active]="account.address === userAddress"
         >
@@ -62,6 +62,39 @@
     <div class="balance-display">
       <span>Balance: {{ walletBalance }} MAS</span>
     </div>
-    <!-- ... rest of your wallet UI ... -->
+    
+    <!--  Transfer Form -->
+    <div class="transfer-form">
+      <h3>Transfer MAS</h3>
+      <div class="form-group">
+        <label for="recipient">Recipient Address:</label>
+        <input 
+          id="recipient"
+          type="text" 
+          [(ngModel)]="recipientAddress" 
+          placeholder="Enter recipient address"
+        >
+      </div>
+      <div class="form-group">
+        <label for="amount">Amount (MAS):</label>
+        <input 
+          id="amount"
+          type="number" 
+          [(ngModel)]="transferAmount" 
+          placeholder="Enter amount"
+          min="0"
+          step="0.000000001"
+        >
+      </div>
+      <button 
+        (click)="transferMAS()"
+        [disabled]="!recipientAddress || !transferAmount"
+      >
+        Send MAS
+      </button>
+      <div class="transfer-status" *ngIf="transferStatus">
+        {{ transferStatus }}
+      </div>
+    </div>
   </div>
 </div>
