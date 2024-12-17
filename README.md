@@ -1,29 +1,82 @@
-# Massa Wallet Connection Template
+# Massa Wallet Integration
 
-An user-friendly Angular application template for connecting to Massa wallets. This template provides an easy way for wallet integration with built-in activity monitoring.
+An Angular application that integrates with Massa blockchain wallets, allowing users to connect wallets, view balances, and transfer MAS tokens.
 
-## Features
+## Core Features
+
+- Wallet connection and management
+- Account switching
+- Balance checking
+- MAS token transfers
+- Automatic disconnection on inactivity
 
 
-- 👥 Multiple account support
-- ⏱️ Automatic session management
-- 🔄 Activity monitoring
-- ⚡ Real-time connection status
 
 
-## Prerequisites
+### Wallet Connection Methods
 
-- Node.js (v14 or higher)
-- Angular CLI (v16 or higher)
-- A Massa wallet (MassaStation)
+#### `initProvider()`
+- Initializes the wallet provider
+- Connects to first available wallet and account
+- Sets up initial wallet connection
 
-## Installation
+#### `changeWallet(wallet: any)`
+- Changes the current wallet to a new selected wallet
+- Updates provider, address, and balance
 
+#### `connectAccount(account: any)`
+- Connects to a specific account within the current wallet
+- Updates provider, address, and balance
+
+#### `disconnectWallet()`
+- Disconnects the current wallet
+- Clears all wallet-related state
+
+### Balance and Transfer Methods
+
+#### `updateWalletBalance()`
+- Fetches and updates the current wallet balance
+- Converts balance from nanoMAS to MAS
+
+#### `transferMAS()`
+- Handles MAS token transfers between addresses
+- Validates input and executes transfer transaction
+
+### Wallet Management Methods
+
+#### `loadWallets()`
+- Loads all available wallets and their accounts
+- Maps wallet accounts to display format
+
+#### `connectWallet(event: Event, wallet: any)`
+- Event handler for wallet connection button
+- Prevents event propagation and changes wallet
+
+
+
+### Activity Monitoring Methods
+
+#### `setupActivityMonitoring()`
+- Sets up user activity listeners for auto-disconnect
+
+
+
+
+
+## Dependencies
+
+- @massalabs/wallet-provider
+- @massalabs/massa-web3
+
+
+## Usage
 1. Clone the repository:
 
 ```bash
 git clone https://github.com/Abdulmalik3/Massa-Wallet-Template.git
 ```
+
+
 
 2. Navigate to the project directory:
 
@@ -49,5 +102,4 @@ ng build
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
+Once the server is running, open your browser and navigate to `http://localhost:4200/`.
