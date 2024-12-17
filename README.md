@@ -13,7 +13,7 @@ An Angular application that integrates with Massa blockchain wallets, allowing u
 
 
 
-### Wallet Connection Methods
+### Wallet Management Methods
 
 #### `initProvider()`
 - Initializes the wallet provider
@@ -32,6 +32,17 @@ An Angular application that integrates with Massa blockchain wallets, allowing u
 - Disconnects the current wallet
 - Clears all wallet-related state
 
+
+#### `loadWallets()`
+- Loads all available wallets and their accounts
+- Maps wallet accounts to display format
+
+#### `connectWallet(event: Event, wallet: any)`
+- Event handler for wallet connection button
+- Prevents event propagation and changes wallet
+
+
+
 ### Balance and Transfer Methods
 
 #### `updateWalletBalance()`
@@ -42,15 +53,6 @@ An Angular application that integrates with Massa blockchain wallets, allowing u
 - Handles MAS token transfers between addresses
 - Validates input and executes transfer transaction
 
-### Wallet Management Methods
-
-#### `loadWallets()`
-- Loads all available wallets and their accounts
-- Maps wallet accounts to display format
-
-#### `connectWallet(event: Event, wallet: any)`
-- Event handler for wallet connection button
-- Prevents event propagation and changes wallet
 
 
 
